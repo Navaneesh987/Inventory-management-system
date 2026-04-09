@@ -32,8 +32,15 @@ def add_item():
 
 def view_items():
     data = load_data()
+    if not data:
+        print("No items available.")
+        return
     for i, item in enumerate(data, 1):
         print(i, item)
+        
+        # 🔥 Low stock alert
+        if item["quantity"] < 5:
+            print("⚠️ Low stock alert for:", item["name"])
 
 def update_item():
     data = load_data()
@@ -42,6 +49,7 @@ def update_item():
     data[i]["quantity"] = int(input("New quantity: "))
     data[i]["price"] = float(input("New price: "))
     save_data(data)
+    print("Item updated!")
 
 def delete_item():
     data = load_data()
@@ -49,11 +57,17 @@ def delete_item():
     i = int(input("Enter item number: ")) - 1
     data.pop(i)
     save_data(data)
+    print("Item deleted!")
 
 def main():
     while True:
         print("\n1.Add 2.View 3.Update 4.Delete 5.Exit")
         ch = input("Enter choice: ")
+        
+        if ch not in ["1","2","3","4","5"]:
+            print("Invalid choice! Enter 1-5")
+            continue
+        
         if ch == "1": add_item()
         elif ch == "2": view_items()
         elif ch == "3": update_item()
